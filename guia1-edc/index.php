@@ -1,11 +1,12 @@
 <?php
-function generarFibonacci($n) {
+function generarFibonacci($n)
+{
     // Inicializar los primeros dos números de la secuencia
     $numero1 = 0;
     $numero2 = 1;
 
     // Validar el número de términos, asegurando que sea positivo
-    if($n <= 0) {
+    if ($n <= 0) {
         echo "Por favor, ingrese un número mayor que 0.";
         return;
     }
@@ -22,7 +23,8 @@ function generarFibonacci($n) {
     }
 }
 
-function esPrimo($numero) {
+function esPrimo($numero)
+{
     // Si el número es menor o igual a 1, se descarta rápidamente como número primo
     if ($numero <= 1) return false;
 
@@ -33,7 +35,8 @@ function esPrimo($numero) {
     return true;
 }
 
-function esPalindromo($texto) {
+function esPalindromo($texto)
+{
     // Eliminar espacios y convertir a minúsculas
     $texto = strtolower(str_replace(' ', '', $texto));
     $i = 0;
@@ -53,12 +56,16 @@ function esPalindromo($texto) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ejercicios Estructuras de Datos PHP - Guía 2</title>
+    <link rel="stylesheet" href="../styles.css">
 </head>
+
 <body>
+    <h1>Ejercicios de Lógica PHP - Guía 2</h1>
     <!-- Sección Secuencia de Fibonacci -->
     <section>
         <h1>Secuencia de Fibonacci</h1>
@@ -134,4 +141,5 @@ function esPalindromo($texto) {
     </section>
 
 </body>
+
 </html>
