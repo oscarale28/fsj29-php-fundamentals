@@ -11,36 +11,44 @@ function validateNumericArray($input) {
     
     // Validar que no esté vacío
     if (empty($array)) {
-        return ['valido' => false, 'mensaje' => 'Por favor, ingrese al menos un número.', 'array' => []];
+        return ['valid' => false, 'message' => 'Por favor, ingrese al menos un número.', 'array' => []];
     }
     
     // Validar que todos los elementos sean numéricos
     $validNumbers = [];
     foreach ($array as $element) {
+        // Bandera de mensaje de excepción, para evitar hacer un return por cada if y así cumplir la regla de <= 3 returns (sonarlint)
+        $exceptionMessage = '';
         if ($element === '' || $element === null) {
-            return ['valido' => false, 'mensaje' => 'No se permiten valores vacíos.', 'array' => []];
+            $exceptionMessage = 'No se permiten valores vacíos.';
         }
         
         if (!is_numeric($element)) {
-            return ['valido' => false, 'mensaje' => "El valor '$element' no es un número válido.", 'array' => []];
+            $exceptionMessage = "El valor '$element' no es un número válido.";
         }
-        
+
+        if ($exceptionMessage !== '') {
+            return ['valid' => false, 'message' => $exceptionMessage, 'array' => []];
+        }
+
         // Convertir a número (mantiene decimales si los hay)
         $validNumbers[] = is_float($element + 0) ? floatval($element) : intval($element);
     }
     
-    return ['valido' => true, 'mensaje' => '', 'array' => $validNumbers];
+    return ['valid' => true, 'message' => '', 'array' => $validNumbers];
 }
 
 function invertedList($inputNumbers) {
-    // Validar entrada
+    // Validar entrada con funcion auxiliar
     $validation = validateNumericArray($inputNumbers);
 
-    if (!$validation['valido']) {
-        echo $validation['mensaje'];
+    // Imprimir mensaje de excepcion de validacion
+    if (!$validation['valid']) {
+        echo $validation['message'];
         return;
     }
 
+    // Obtener numeros validos
     $validNumbers = $validation['array'];
 
     // Validar que el array tenga al menos dos caracteres
@@ -62,32 +70,34 @@ function invertedList($inputNumbers) {
 }
 
 function evenNumbersAddition($inputNumbers) {
-    // Validar entrada de numeros
+    // Validar entrada de numeros con funcion auxiliar
     $validation = validateNumericArray($inputNumbers);
-    // Validar que el array no esté vacío
-    if (!$validation['valido']) {
-        echo $validation['mensaje'];
+    
+    // Imprimir mensaje de excepcion de validacion
+    if (!$validation['valid']) {
+        echo $validation['message'];
         return;
     }
 
     $validNumbers = $validation['array'];
     
-    $suma = 0;
-    $pares = [];
+    // Acumuladores para suma y agrupacion de numeros pares
+    $result = 0;
+    $evenNumbers = [];
     
     // Encontrar números pares y sumarlos
-    foreach ($validNumbers as $numero) {
-        if ($numero % 2 == 0) {
-            $suma += $numero;
-            $pares[] = $numero;
+    foreach ($validNumbers as $number) {
+        if ($number % 2 == 0) {
+            $result += $number;
+            $evenNumbers[] = $number;
         }
     }
     
     // Mostrar resultado
     echo "Array: [" . implode(', ', $validNumbers) . "]<br>";
-    if (!empty($pares)) {
-        echo "Números pares: [" . implode(', ', $pares) . "]<br>";
-        echo "Suma de números pares: " . $suma;
+    if (!empty($evenNumbers)) {
+        echo "Números pares: [" . implode(', ', $evenNumbers) . "]<br>";
+        echo "Suma de números pares: " . $result;
     } else {
         echo "No se encontraron números pares.<br>";
         echo "Suma: 0";
@@ -100,16 +110,17 @@ function charactesFrequency($inputText) {
         echo "Por favor, ingrese un texto.";
         return;
     }
-    
-    $frecuencia = [];
+
+    // Acumulador para la frecuencia por caracter
+    $frequency = [];
     
     // Contar la frecuencia de cada carácter
     for ($i = 0; $i < strlen($inputText); $i++) {
-        $caracter = $inputText[$i];
-        if (isset($frecuencia[$caracter])) {
-            $frecuencia[$caracter]++;
+        $character = $inputText[$i];
+        if (isset($frequency[$character])) {
+            $frequency[$character]++;
         } else {
-            $frecuencia[$caracter] = 1;
+            $frequency[$character] = 1;
         }
     }
     
@@ -117,28 +128,28 @@ function charactesFrequency($inputText) {
     echo "Texto: \"" . htmlspecialchars($inputText) . "\"<br>";
     echo "Frecuencia de caracteres:<br>";
     echo "<ul>";
-    foreach ($frecuencia as $caracter => $cantidad) {
-        $caracterMostrar = ($caracter === ' ') ? 'espacio' : htmlspecialchars($caracter);
-        echo "<li>'" . $caracterMostrar . "': " . $cantidad . "</li>";
+    foreach ($frequency as $character => $quantity) {
+        $characterToShow = ($character === ' ') ? 'espacio' : htmlspecialchars($character);
+        echo "<li>'" . $characterToShow . "': " . $quantity . "</li>";
     }
     echo "</ul>";
 }
 
-function asterisksPyramid($altura) {
+function asterisksPyramid($height) {
     // Validar que la altura sea positiva
     // Ya se hace una validacion preliminar en el input, pero por si acaso
-    if ($altura <= 0) {
+    if ($height <= 0) {
         echo "Por favor, ingrese un número mayor que 0.";
         return;
     }
-    
-    echo "Pirámide de " . $altura . " niveles:<br>";
+
+    echo "Pirámide de " . $height . " niveles:<br>";
     echo "<pre>";
     
     // Crear la pirámide
-    for ($i = 1; $i <= $altura; $i++) {
+    for ($i = 1; $i <= $height; $i++) {
         // Imprimir espacios para centrar
-        for ($j = 1; $j <= ($altura - $i); $j++) {
+        for ($j = 1; $j <= ($height - $i); $j++) {
             echo " ";
         }
         
